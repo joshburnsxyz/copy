@@ -10,6 +10,7 @@ copy:
 		-v \
 		-x \
 		-o $(OUT)/$(BIN) \
+	./$(SRC)
 
 install:
 	@cp $(OUT)/$(BIN) $(PREFIX)/bin/$(BIN)
