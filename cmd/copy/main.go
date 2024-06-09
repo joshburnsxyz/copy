@@ -10,6 +10,8 @@ var (
 	showHelp     bool
 	showProgress bool
 	recursive    bool
+	sourcePath   string
+	destPath     string
 )
 
 func init() {
@@ -30,6 +32,48 @@ func main() {
 	// Display help message if asked for it
 	if showHelp {
 		flag.Usage()
-		return
+		os.Exit(0)
 	}
+
+	// if we dont get both args, print usage and exit
+	args := flag.Args()
+	if len(args) != 2 {
+		flag.Usage()
+		os.Exit(1)
+	}
+
+	// get source and dest paths as strings
+	sourcePath = args[0]
+	destPath = args[1]
+
+	// Check source exists
+	file, err := os.Stat(sourcePath)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "ERROR: %s", err)
+		os.Exit(1)
+	}
+
+	// check if recursive flag is enabled for directory sources
+	if file.IsDir() {
+		if !recursive {
+			fmt.Fprintf(os.Stderr, "ERROR: source is a directory, use -R to copy recursively")
+			os.Exit(1)
+		}
+		err = copyDir(sourcePath, destPath, showProgress)
+	} else {
+		err = copyFile(sourcePath, destPath, showProgress)
+	}
+
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "ERROR: %s", err)
+		os.Exit(1)
+	}
+}
+
+func copyFile(src string, dest string, progress bool) error {
+	// TODO: implement copy file function
+}
+
+func copyDir(src string, dest string, progress bool) error {
+	// TODO: implement copy file function
 }
