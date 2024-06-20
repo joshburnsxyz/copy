@@ -1,19 +1,14 @@
-GOX := $(shell which go)
+GOX := $(shell which goreleaser)
 BIN := copy
 SRC := cmd/copy
 OUT := dist
 PREFIX := /usr/local
 
-copy:
-	@mkdir -p $(OUT)
-	$(GOX) build \
-		-v \
-		-x \
-		-o $(OUT)/$(BIN) \
-	./$(SRC)
+release-local:
+	$(GOX) release --snapshot --clean
 
-install:
-	@cp $(OUT)/$(BIN) $(PREFIX)/bin/$(BIN)
+release:
+	$(GOX) release
 
 clean:
 	@rm -rf $(OUT)
